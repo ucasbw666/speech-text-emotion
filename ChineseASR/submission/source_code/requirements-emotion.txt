@@ -1,0 +1,7 @@
+# Install torchaudio alongside the matching torch build (see environment.yml).
+# Keep the existing CUDA torch build when adding torchaudio to an old environment.
+numpy==1.26.4
+scikit-learn==1.7.2
+funasr==1.4.24
+modelscope>=1.20,<2
+opensmile==2.6.0

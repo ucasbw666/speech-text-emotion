@@ -1,0 +1,9 @@
+{
+  "python": "3.10.21 | packaged by conda-forge | (main, Aug 21 2026, 22:38:44) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "D:\\Anaconda\\envs\\chinese-asr\\python.exe",
+  "torch": "2.5.1",
+  "cuda": "12.1",
+  "cuda_available": true,
+  "gradio": "6.17.3",
+  "numpy": "1.26.4"
+}

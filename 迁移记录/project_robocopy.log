@@ -1,0 +1,31 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : 20261124 20:05:45
+   Source : C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\
+     Dest : D:\语音大作业\ChineseASR\
+
+    Files : *.*
+	    
+ Exc Dirs : .pytest_cache
+	    
+  Options : *.* /NDL /NFL /S /E /DCOPY:DAT /COPY:DAT /NP /XJ /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :       235       234         1         0         0         0
+   Files :      1797      1797         0         0         0         0
+   Bytes :   3.466 g   3.466 g         0         0         0         0
+   Times :   0:00:03   0:00:03                       0:00:00   0:00:00
+
+
+   Speed :           1,164,383,882 Bytes/sec.
+   Speed :              66,626.578 MegaBytes/min.
+   Ended : 20261124 20:05:49
+

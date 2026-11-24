@@ -1,0 +1,14 @@
+name: chinese-asr
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch=2.5.1
+  - pytorch-cuda=12.1
+  - ffmpeg
+  - pip:
+      - -r requirements.txt
+

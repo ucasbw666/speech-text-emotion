@@ -1,0 +1,64 @@
+{
+  "config": {
+    "project": {
+      "name": "ChineseASR",
+      "seed": 42
+    },
+    "model": {
+      "source": "openai/whisper-small",
+      "local_dir": "models/asr_model",
+      "language": "zh",
+      "task": "transcribe",
+      "local_files_only": true
+    },
+    "training": {
+      "method": "lora",
+      "epochs": 3,
+      "batch_size": 1,
+      "gradient_accumulation_steps": 8,
+      "learning_rate": 0.0001,
+      "warmup_ratio": 0.1,
+      "fp16": true,
+      "gradient_checkpointing": false,
+      "lora_r": 16,
+      "lora_alpha": 32,
+      "lora_dropout": 0.05,
+      "save_total_limit": 2
+    },
+    "augmentation": {
+      "enabled": true,
+      "speed_probability": 0.4,
+      "speed_min": 0.9,
+      "speed_max": 1.1,
+      "gain_probability": 0.4,
+      "gain_db_min": -6.0,
+      "gain_db_max": 6.0,
+      "noise_probability": 0.3,
+      "snr_db_min": 10.0,
+      "snr_db_max": 25.0,
+      "specaugment_probability": 0.5
+    },
+    "data": {
+      "sample_rate": 16000
+    }
+  },
+  "arguments": {
+    "train_manifest": "data\\manifests\\train.jsonl",
+    "dev_manifest": "data\\manifests\\dev.jsonl",
+    "config": "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\configs\\improved.yaml",
+    "model_dir": "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\models\\asr_model",
+    "output_dir": "checkpoints\\smoke",
+    "batch_size": null,
+    "epochs": null,
+    "learning_rate": null,
+    "device": "cuda",
+    "num_workers": 0,
+    "smoke_test": true
+  },
+  "device": "cuda",
+  "torch_version": "2.5.1",
+  "train_samples": 2,
+  "dev_samples": 2,
+  "best_validation_loss": 4.410876512527466,
+  "total_seconds": 1.2491040999993857
+}

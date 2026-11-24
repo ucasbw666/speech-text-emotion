@@ -1,0 +1,21 @@
+{
+  "original": {
+    "substitutions": 325,
+    "deletions": 17,
+    "insertions": 1,
+    "reference_characters": 5041,
+    "errors": 343,
+    "cer": 0.06804205514778813
+  },
+  "corrected": {
+    "substitutions": 325,
+    "deletions": 17,
+    "insertions": 1,
+    "reference_characters": 5041,
+    "errors": 343,
+    "cer": 0.06804205514778813
+  },
+  "corrections_applied": 0,
+  "absolute_cer_change": 0.0,
+  "lexicon_entries": 11
+}

@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Dataset and model payloads
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep
+checkpoints/*
+!checkpoints/baseline/.gitkeep
+!checkpoints/improved/.gitkeep
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+
+# Runtime outputs
+logs/*.log
+results/*.json
+results/*.csv
+results/figures/*.png
+report/figures/*.png
+submission/
+
+# Hugging Face / audio caches
+.cache/
+wandb/
+*.wav
+*.mp3
+*.flac
+

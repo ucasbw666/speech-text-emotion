@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "status": "PASS",
+      "label": "Python 环境安装成功",
+      "detail": "Python 3.10.21, PyTorch 2.5.1"
+    },
+    {
+      "status": "PASS",
+      "label": "CUDA 可用",
+      "detail": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    },
+    {
+      "status": "PASS",
+      "label": "本地模型文件存在",
+      "detail": "models/asr_model"
+    },
+    {
+      "status": "PASS",
+      "label": "训练后模型存在",
+      "detail": "LoRA improved adapter"
+    },
+    {
+      "status": "PASS",
+      "label": "train/dev/test 划分互斥",
+      "detail": "364/354/355"
+    },
+    {
+      "status": "PASS",
+      "label": "Baseline results 存在",
+      "detail": "CER=0.266614"
+    },
+    {
+      "status": "PASS",
+      "label": "Improved results 存在",
+      "detail": "CER=0.068042"
+    },
+    {
+      "status": "PASS",
+      "label": "Baseline/Improved 可比较",
+      "detail": "0.266614 -> 0.068042"
+    },
+    {
+      "status": "PASS",
+      "label": "baseline 逐样本预测完整",
+      "detail": "355 rows"
+    },
+    {
+      "status": "PASS",
+      "label": "improved 逐样本预测完整",
+      "detail": "355 rows"
+    },
+    {
+      "status": "PASS",
+      "label": "报告图表已生成",
+      "detail": "6 figures"
+    },
+    {
+      "status": "PASS",
+      "label": "实验报告完整且无 Pending",
+      "detail": "report/experiment_report.md"
+    },
+    {
+      "status": "PASS",
+      "label": "README 完整",
+      "detail": "README.md"
+    },
+    {
+      "status": "PASS",
+      "label": "提交包包含四项必交材料及运行依赖说明",
+      "detail": "20 required files"
+    },
+    {
+      "status": "PASS",
+      "label": "提交包源码和报告与当前版本一致",
+      "detail": "app.py / README.md / experiment_report.md SHA-256"
+    },
+    {
+      "status": "PASS",
+      "label": "提交包最终模型与训练 checkpoint 一致",
+      "detail": "LoRA adapter SHA-256"
+    },
+    {
+      "status": "PASS",
+      "label": "提交包情绪权重与本机正式模型一致",
+      "detail": "voice-main backbone adapter SHA-256"
+    },
+    {
+      "status": "PASS",
+      "label": "真实文字与情绪联合识别",
+      "detail": "3 public audio samples; six-class probabilities and segments"
+    },
+    {
+      "status": "PASS",
+      "label": "联合网页上传和按钮流程",
+      "detail": "Microsoft Edge real upload; text and emotion displayed"
+    },
+    {
+      "status": "PASS",
+      "label": "UI 支持上传和麦克风",
+      "detail": "Gradio Audio sources"
+    },
+    {
+      "status": "PASS",
+      "label": "UI 可以启动",
+      "detail": "http://127.0.0.1:7860"
+    },
+    {
+      "status": "PASS",
+      "label": "上传音频可以识别",
+      "detail": "Baseline and Improved API"
+    },
+    {
+      "status": "PASS",
+      "label": "单个 WAV / 连续中文输出",
+      "detail": "人工智能正在改变我们的生活方式语音识别技术可以把连续的中文语音转换成文字"
+    },
+    {
+      "status": "PASS",
+      "label": "本地 CUDA 推理",
+      "detail": "模型：Improved；设备：cuda；完全本地推理"
+    }
+  ],
+  "passed": 24,
+  "failed": 0
+}

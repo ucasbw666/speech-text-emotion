@@ -1,0 +1,22 @@
+project:
+  name: ChineseASR
+  seed: 42
+model:
+  source: openai/whisper-small
+  local_dir: models/asr_model
+  language: zh
+  task: transcribe
+  local_files_only: true
+inference:
+  device: auto
+  batch_size: 1
+  num_beams: 1
+  max_new_tokens: 256
+  chunk_length_s: 30
+data:
+  sample_rate: 16000
+  text_normalization:
+    lowercase_english: true
+    remove_punctuation: true
+    normalize_width: true
+

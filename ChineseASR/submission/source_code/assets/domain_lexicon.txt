@@ -1,0 +1,13 @@
+# One domain term per line. Keep this list fixed before test evaluation.
+人工智能
+机器学习
+深度学习
+语音识别
+神经网络
+自然语言处理
+大语言模型
+特征提取
+编码器
+解码器
+字符错误率
+

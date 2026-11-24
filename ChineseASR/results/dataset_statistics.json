@@ -1,0 +1,19 @@
+{
+  "utterances": 1073,
+  "total_duration_seconds": 4768.668937500009,
+  "total_duration_hours": 1.324630260416669,
+  "average_duration_seconds": 4.444239457129552,
+  "minimum_duration_seconds": 1.344,
+  "maximum_duration_seconds": 10.44625,
+  "chinese_characters": 15069,
+  "sample_rates": {
+    "16000": 1073
+  },
+  "split_counts": {
+    "train": 364,
+    "dev": 354,
+    "test": 355
+  },
+  "unmatched_audio_files": 3,
+  "seed": 42
+}

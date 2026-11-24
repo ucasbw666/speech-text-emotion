@@ -1,0 +1,1464 @@
+你现在是我的高级机器学习工程师、语音识别研究助手和课程大作业开发助手。
+
+我需要完成一个本科课程大作业：
+
+# 汉语语音识别实验：模型支持汉语连续语音识别
+
+课程要求如下：
+
+## 一、必须提交的内容
+
+需要提交：
+
+1. 数据集
+2. 完整源代码
+3. 训练或微调后的模型
+4. 实验报告
+
+允许：
+
+- 使用公开数据集
+- 使用开源代码
+- 使用预训练模型
+- 使用 Python
+- 使用端到端语音识别模型
+
+实验报告至少需要包括：
+
+1. 方法描述
+2. 数据集描述
+3. 实验环境
+4. 实验过程
+5. 实验结果
+6. 实验结果分析
+7. 原型系统展示
+8. 实验总结
+
+## 二、评分标准
+
+基本项：
+完成大作业要求规定的全部内容：24 分。
+
+附加项：
+
+1. 原型系统具有可展示的 UI 界面：+4
+2. 原型系统支持实时声音采集或任意语音输入：+4
+3. 针对模型具有创新性改进，并相对基线取得明显性能提升：+4
+4. 原型系统完全可以在本机运行，不需要连接服务器：+4
+
+目标是尽可能完成基本项以及四个附加项。
+
+---
+
+# 一、你的总体任务
+
+请你直接协助我实现一个完整、可以运行、可以展示、可以写进实验报告、可以提交的大作业项目。
+
+项目暂定名称：
+
+ChineseASR
+
+目标：
+
+构建一个支持汉语连续语音识别的端到端系统。
+
+系统至少应该支持：
+
+- 中文普通话连续语音识别
+- wav/mp3/flac 等音频文件上传识别
+- 麦克风实时录音识别
+- 本地运行
+- Web UI
+- 输出中文识别文本
+- 批量测试
+- CER（Character Error Rate）评价
+- baseline 与 improved model 对比
+- 保存实验结果
+- 生成可以用于报告的图表
+
+请优先保证：
+
+可运行 > 实验完整 > 结果可信 > 模型复杂程度。
+
+不要为了所谓“创新”实现一个非常复杂而无法训练成功的方法。
+
+---
+
+# 二、技术路线
+
+请首先检查当前计算机的软件和硬件环境，包括：
+
+- 操作系统
+- Python
+- pip
+- Conda（如果存在）
+- NVIDIA GPU
+- CUDA
+- cuDNN
+- PyTorch
+- 可用显存
+- 可用磁盘空间
+
+请把检查结果记录到：
+
+docs/environment.md
+
+然后根据硬件自动选择合理方案。
+
+优先考虑以下两个技术路线：
+
+## 路线 A：FunASR
+
+例如：
+
+Paraformer 中文 ASR 模型。
+
+优点：
+
+- 中文效果较好
+- 适合普通话
+- 推理速度快
+- 比较容易本地部署
+- 适合作为课程实验
+
+## 路线 B：Whisper
+
+例如：
+
+openai/whisper-small
+openai/whisper-base
+或 HuggingFace Transformers 中的 WhisperForConditionalGeneration。
+
+优点：
+
+- 端到端模型结构清晰
+- 文档丰富
+- 容易进行实验
+- 适合解释 Transformer Encoder-Decoder ASR 原理
+
+请根据本机硬件、下载条件、训练成本和实现复杂度选择一个作为主模型。
+
+如果没有非常明显的理由，我希望优先采用：
+
+FunASR Paraformer 或 Whisper-small。
+
+在确定之前，不要同时实现多个重量级模型。
+
+最终 README 中必须清楚说明选择该模型的原因。
+
+---
+
+# 三、数据集
+
+优先选择公开普通话语音数据集。
+
+建议考虑：
+
+AISHELL-1。
+
+如果 AISHELL-1 下载、许可证或数据量导致课程实验部署过于困难，也可以选择：
+
+- AISHELL-1 子集
+- Common Voice 中文普通话
+- MagicData 子集
+- 其他公开中文普通话 ASR 数据集
+
+要求：
+
+必须保留 train / validation / test 的合理划分。
+
+不要把 test 数据用于训练。
+
+项目中建立：
+
+data/
+    raw/
+    processed/
+    manifests/
+
+由于完整数据集可能很大：
+
+不要把几 GB 或几十 GB 数据直接复制很多份。
+
+尽量通过 manifest 管理：
+
+audio_path|transcript
+
+或者 JSONL：
+
+{
+    "audio": "...",
+    "text": "..."
+}
+
+请实现：
+
+scripts/prepare_data.py
+
+完成：
+
+1. 扫描数据
+2. 文本清洗
+3. 音频路径检查
+4. train/dev/test 划分或读取官方划分
+5. 生成 manifest
+6. 输出数据统计
+
+统计：
+
+- utterance 数量
+- 总时长
+- 平均时长
+- 最大/最小时长
+- 中文字符数量
+- 音频采样率
+- train/dev/test 数量
+
+保存到：
+
+results/dataset_statistics.json
+
+同时生成适合写实验报告的统计表。
+
+---
+
+# 四、中文文本预处理
+
+实现统一文本 normalization。
+
+建立：
+
+src/text_normalization.py
+
+至少处理：
+
+- 去除无意义空格
+- 英文大小写统一
+- 中文标点
+- 全角/半角符号
+- 特殊字符
+- 可选数字规范化
+
+注意：
+
+训练、验证、测试的文本处理必须保持一致。
+
+CER 计算前也必须经过同一 normalization。
+
+---
+
+# 五、Baseline
+
+必须建立一个清晰的 baseline。
+
+Baseline 应尽量简单可靠。
+
+例如：
+
+预训练 Paraformer / Whisper 模型直接进行中文语音识别。
+
+或者：
+
+在训练集上进行标准 supervised fine-tuning。
+
+baseline 不加入自定义改进。
+
+需要实现：
+
+src/baseline.py
+
+以及：
+
+scripts/evaluate_baseline.py
+
+Baseline 测试至少输出：
+
+- CER
+- 推理时间
+- Real-Time Factor（如果方便）
+- 平均单条推理时间
+
+保存：
+
+results/baseline_results.json
+
+同时保存逐样本结果：
+
+results/baseline_predictions.csv
+
+格式：
+
+audio_path
+reference
+prediction
+cer
+
+---
+
+# 六、模型训练 / 微调
+
+如果硬件允许，希望完成一次小规模 fine-tuning。
+
+要求实现：
+
+scripts/train.py
+
+支持：
+
+--train_manifest
+--dev_manifest
+--batch_size
+--epochs
+--learning_rate
+--output_dir
+--device
+
+训练过程中记录：
+
+- train loss
+- validation loss
+- learning rate
+- epoch
+- best checkpoint
+
+保存到：
+
+checkpoints/
+
+例如：
+
+checkpoints/
+    baseline/
+    improved/
+
+不要盲目设置非常大的 epoch。
+
+先进行：
+
+1. smoke test
+2. 小数据测试
+3. 确认训练 pipeline 正确
+4. 再正式训练
+
+所有训练参数写入：
+
+configs/
+
+例如：
+
+configs/baseline.yaml
+configs/improved.yaml
+
+---
+
+# 七、创新性改进
+
+这是非常重要的一部分。
+
+课程附加项要求：
+
+“针对模型具有创新性改进，比基线性能明显提升。”
+
+注意：
+
+不要虚构结果。
+
+不要为了创新性写一个实际上没有实现的模型。
+
+请优先设计：
+
+本科大作业能够真正完成，
+实现成本低，
+训练成本可接受，
+能够做 ablation，
+有概率降低 CER
+
+的改进方案。
+
+请在开始实现前分析 3 个候选方案，然后选择一个最实际的方法。
+
+候选可以从以下方向考虑：
+
+## 方案 1：数据增强
+
+训练阶段加入：
+
+- speed perturbation
+- random gain
+- background noise
+- SpecAugment
+
+比较：
+
+Baseline
+
+vs
+
+Baseline + Augmentation
+
+观察 CER。
+
+这是优先考虑的方案。
+
+---
+
+## 方案 2：中文语言模型 / 解码后处理
+
+对 ASR 输出加入轻量中文语言约束。
+
+例如：
+
+- beam search
+- KenLM
+- 中文词频
+- 简单 contextual biasing
+
+比较：
+
+Greedy Decode
+
+vs
+
+Improved Decode。
+
+但如果实现复杂度过高，不强求。
+
+---
+
+## 方案 3：领域词汇纠错
+
+设计一个轻量中文 ASR post-processing 模块。
+
+例如：
+
+基于拼音相似度 + 中文词频进行同音字纠错。
+
+pipeline：
+
+ASR
+
+↓
+
+Raw Transcript
+
+↓
+
+Pinyin-aware Correction
+
+↓
+
+Final Transcript
+
+例如处理：
+
+“人工只能”
+
+→
+
+“人工智能”
+
+这样的同音/近音错误。
+
+可以构建一个简单领域词典：
+
+assets/domain_lexicon.txt
+
+但必须严格通过 test CER 验证效果。
+
+---
+
+最终请根据实际实验选择最有效、最容易复现的方法。
+
+必须做：
+
+Baseline CER
+
+vs
+
+Improved CER
+
+并计算：
+
+Absolute Improvement
+
+Relative CER Reduction
+
+例如：
+
+CER_baseline = X
+
+CER_improved = Y
+
+Relative Reduction =
+(X-Y)/X × 100%
+
+如果实验没有提升：
+
+不要伪造提升。
+
+分析失败原因，并尝试合理调整。
+
+---
+
+# 八、评价指标
+
+必须实现：
+
+src/metrics.py
+
+重点指标：
+
+CER（Character Error Rate）
+
+定义：
+
+CER = (S + D + I) / N
+
+其中：
+
+S：Substitution
+D：Deletion
+I：Insertion
+N：参考文本字符数
+
+请自己实现一个 CER 或使用 jiwer，同时最好提供自己的 Levenshtein 实现方便课程讲解。
+
+输出：
+
+overall CER
+
+以及：
+
+Substitution
+Deletion
+Insertion
+
+如方便，再计算 WER，但中文实验以 CER 为主。
+
+---
+
+# 九、错误分析
+
+请实现：
+
+scripts/error_analysis.py
+
+针对 test set 找出：
+
+CER 最大的若干样本。
+
+分析：
+
+- 同音字错误
+- 漏字
+- 插字
+- 数字识别错误
+- 英文/中文混合
+- 长语音
+- 噪声
+- 语速
+- 专有名词
+
+输出：
+
+results/error_analysis.csv
+
+并选出至少 5 个典型 case。
+
+例如：
+
+reference:
+人工智能正在快速发展
+
+prediction:
+人工只能正在快速发展
+
+error type:
+同音字 substitution
+
+这些内容之后用于实验报告。
+
+---
+
+# 十、可视化
+
+建立：
+
+scripts/plot_results.py
+
+自动生成：
+
+results/figures/
+
+至少包括：
+
+1. train_loss.png
+2. val_loss.png
+3. baseline_vs_improved_cer.png
+4. audio_duration_distribution.png
+
+如果有合适数据，也可以生成：
+
+5. inference_time.png
+6. error_type_distribution.png
+
+图标题、坐标轴要规范。
+
+这些图片之后用于实验报告。
+
+---
+
+# 十一、UI 原型系统
+
+这是评分附加项。
+
+请使用：
+
+Gradio
+
+开发一个本地 Web UI。
+
+文件：
+
+app.py
+
+页面标题：
+
+汉语连续语音识别系统
+
+Chinese Continuous Speech Recognition System
+
+UI 至少支持两个输入方式：
+
+## 模式 1
+
+麦克风录音
+
+用户点击录音：
+
+开始说中文
+
+停止录音
+
+系统自动识别。
+
+## 模式 2
+
+上传音频：
+
+wav
+mp3
+flac
+
+然后点击：
+
+开始识别
+
+输出：
+
+识别结果
+
+以及：
+
+音频时长
+推理耗时
+
+如果可以，增加：
+
+模型选择：
+
+Baseline
+Improved
+
+方便现场展示实验效果。
+
+UI 页面加入：
+
+系统说明
+
+当前模型
+
+运行设备：
+
+CPU / CUDA
+
+UI 必须：
+
+localhost 本地运行。
+
+不要依赖远程 API。
+
+不要依赖 OpenAI API。
+
+不要依赖在线服务器进行识别。
+
+---
+
+# 十二、本机离线运行
+
+评分中：
+
+“原型系统在本机运行，无需连接服务器”
+
+要求：
+
+模型下载完成后，可以完全离线推理。
+
+请实现：
+
+scripts/download_model.py
+
+第一次联网时：
+
+下载模型。
+
+之后：
+
+保存到：
+
+models/
+
+例如：
+
+models/asr_model/
+
+app.py 默认优先读取：
+
+./models/
+
+而不是运行时联网下载。
+
+如果模型不存在：
+
+给出清晰错误提示。
+
+README 中写：
+
+python scripts/download_model.py
+
+然后：
+
+python app.py
+
+之后系统即可本地运行。
+
+---
+
+# 十三、工程结构
+
+请最终整理成类似：
+
+ChineseASR/
+│
+├── README.md
+├── requirements.txt
+├── app.py
+│
+├── configs/
+│   ├── baseline.yaml
+│   └── improved.yaml
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── manifests/
+│
+├── models/
+│
+├── checkpoints/
+│   ├── baseline/
+│   └── improved/
+│
+├── src/
+│   ├── __init__.py
+│   ├── model.py
+│   ├── dataset.py
+│   ├── preprocessing.py
+│   ├── text_normalization.py
+│   ├── augmentation.py
+│   ├── metrics.py
+│   ├── inference.py
+│   └── correction.py
+│
+├── scripts/
+│   ├── download_model.py
+│   ├── prepare_data.py
+│   ├── train.py
+│   ├── evaluate_baseline.py
+│   ├── evaluate_improved.py
+│   ├── error_analysis.py
+│   └── plot_results.py
+│
+├── assets/
+│   └── domain_lexicon.txt
+│
+├── results/
+│   ├── baseline_results.json
+│   ├── improved_results.json
+│   ├── baseline_predictions.csv
+│   ├── improved_predictions.csv
+│   ├── error_analysis.csv
+│   └── figures/
+│
+├── report/
+│   ├── experiment_report.md
+│   └── figures/
+│
+└── docs/
+    ├── environment.md
+    ├── methodology.md
+    └── demo_guide.md
+
+允许根据实际框架进行调整，但结构必须清晰。
+
+---
+
+# 十四、README
+
+README 必须详细写清楚：
+
+## Project Introduction
+
+这个项目做什么。
+
+## Features
+
+- Mandarin ASR
+- continuous speech
+- microphone
+- audio upload
+- local inference
+- Gradio UI
+
+## Installation
+
+例如：
+
+conda create -n chinese_asr python=3.10
+
+conda activate chinese_asr
+
+pip install -r requirements.txt
+
+## Data Preparation
+
+如何准备数据。
+
+## Model Download
+
+如何下载模型。
+
+## Training
+
+Baseline / improved 如何训练。
+
+## Evaluation
+
+如何得到 CER。
+
+## Run UI
+
+python app.py
+
+## Project Structure
+
+目录解释。
+
+## Experimental Results
+
+Baseline vs Improved。
+
+---
+
+# 十五、实验报告
+
+项目最终必须生成：
+
+report/experiment_report.md
+
+报告按照正式大学实验报告写。
+
+至少包含：
+
+# 汉语连续语音识别实验
+
+## 1 实验目的
+
+介绍 ASR 与本实验目标。
+
+## 2 方法原理
+
+介绍整个 ASR Pipeline：
+
+Audio
+
+→
+
+Feature Extraction
+
+→
+
+Encoder
+
+→
+
+Decoder / Predictor
+
+→
+
+Chinese Transcript
+
+根据实际选择的模型讲解。
+
+如果使用 Whisper：
+
+重点解释：
+
+log-Mel Spectrogram
+Transformer Encoder
+Transformer Decoder
+Cross Attention
+Autoregressive Decode
+
+如果使用 Paraformer：
+
+解释：
+
+Encoder
+Predictor
+Sampler
+Decoder
+Non-autoregressive ASR
+
+不要泛泛而谈。
+
+必须和代码实际使用模型一致。
+
+## 3 数据集
+
+介绍：
+
+数据来源
+
+train/dev/test
+
+数量
+
+总时长
+
+采样率
+
+文本格式
+
+数据清洗
+
+## 4 实验环境
+
+Python
+
+PyTorch
+
+CUDA
+
+GPU
+
+CPU
+
+OS
+
+主要依赖。
+
+## 5 Baseline
+
+详细说明 baseline。
+
+## 6 改进方法
+
+介绍具体改进。
+
+解释：
+
+为什么可能有效
+
+具体实现方法
+
+和 baseline 有什么区别。
+
+## 7 实验设置
+
+batch size
+
+learning rate
+
+epoch
+
+optimizer
+
+scheduler
+
+decoding
+
+random seed
+
+等。
+
+## 8 实验结果
+
+必须使用真实结果。
+
+使用表格：
+
+| Method | CER | Improvement |
+| ... |
+
+禁止虚构数据。
+
+## 9 结果分析
+
+分析：
+
+baseline
+
+改进模型
+
+为什么提升
+
+或者为什么没有提升。
+
+## 10 Error Analysis
+
+展示真实 recognition examples。
+
+## 11 原型系统
+
+介绍：
+
+Gradio UI
+
+麦克风输入
+
+文件输入
+
+本地推理
+
+附截图位置：
+
+Figure X.
+
+## 12 总结
+
+总结：
+
+完成内容
+
+效果
+
+问题
+
+未来改进。
+
+---
+
+# 十六、Demo
+
+请创建：
+
+docs/demo_guide.md
+
+告诉我答辩现场应该怎么演示。
+
+理想演示过程：
+
+1. 打开 Terminal
+2. activate 环境
+3. python app.py
+4. 浏览器打开 localhost
+5. 点击麦克风
+6. 说一句：
+
+“人工智能正在改变我们的生活方式”
+
+7. 系统输出文本
+8. 再上传一段长中文语音
+9. 展示连续语音识别
+10. 展示 baseline/improved 对比
+11. 展示 CER
+
+整个 Demo 最好 2-3 分钟可以完成。
+
+---
+
+# 十七、实验可复现性
+
+请设置随机种子。
+
+保存：
+
+config
+
+模型参数
+
+训练日志
+
+evaluation result。
+
+不要让实验结果只存在 Terminal。
+
+所有重要实验结果必须写文件。
+
+例如：
+
+logs/
+
+results/
+
+---
+
+# 十八、开发原则
+
+非常重要。
+
+请严格遵守：
+
+## 1. 不要一次写完所有代码却不测试
+
+按照：
+
+环境检查
+
+↓
+
+最小推理 Demo
+
+↓
+
+数据读取
+
+↓
+
+CER
+
+↓
+
+Baseline Evaluation
+
+↓
+
+Training / Fine-tuning
+
+↓
+
+Improvement
+
+↓
+
+UI
+
+↓
+
+Report
+
+逐步实现。
+
+---
+
+## 2. 每完成一个阶段就运行测试
+
+例如：
+
+python -m pytest
+
+或者：
+
+python scripts/xxx.py --smoke_test
+
+确保代码真的能运行。
+
+---
+
+## 3. 遇到错误直接调试
+
+不要只是告诉我：
+
+“你可以修改 XXX”。
+
+而是：
+
+检查 traceback
+
+定位错误
+
+修改代码
+
+重新运行。
+
+直到当前阶段可以运行。
+
+---
+
+## 4. 不要虚构实验结果
+
+CER、loss、推理速度都必须来自程序实际运行。
+
+如果训练还没有运行：
+
+报告里写：
+
+TODO / Pending Experiment
+
+不要编数字。
+
+---
+
+## 5. 不要破坏已经能够运行的功能
+
+修改前阅读已有代码。
+
+优先进行最小修改。
+
+---
+
+## 6. 控制复杂度
+
+这是本科课程大作业。
+
+目标不是发表顶会。
+
+目标是：
+
+完整
+
+可靠
+
+可解释
+
+可复现
+
+可展示。
+
+---
+
+# 十九、磁盘与模型管理
+
+语音数据和模型可能很大。
+
+在下载前先检查：
+
+剩余磁盘空间。
+
+不要重复下载。
+
+如果数据已经存在：
+
+直接复用。
+
+大文件加入：
+
+.gitignore
+
+包括：
+
+data/raw/
+
+models/
+
+checkpoints/
+
+*.pt
+
+*.pth
+
+*.bin
+
+*.safetensors
+
+同时生成：
+
+MODEL_DOWNLOAD.md
+
+告诉我模型从哪里获得。
+
+---
+
+# 二十、Git
+
+初始化 Git repository。
+
+合理拆分 commit，例如：
+
+initial project structure
+
+add baseline inference
+
+add dataset preprocessing
+
+add CER evaluation
+
+add improved ASR
+
+add gradio UI
+
+add experiment report
+
+不要把：
+
+大型数据集
+
+模型 checkpoint
+
+缓存
+
+加入 Git。
+
+---
+
+# 二十一、最终验收
+
+当你认为项目完成以后，请执行完整验收。
+
+至少验证：
+
+[ ] Python 环境安装成功
+
+[ ] 模型可加载
+
+[ ] 单个 wav 可以识别
+
+[ ] 中文连续语音能够输出文本
+
+[ ] test set 可以批量 evaluation
+
+[ ] CER 能正确计算
+
+[ ] baseline results 存在
+
+[ ] improved results 存在
+
+[ ] baseline/improved 可以比较
+
+[ ] UI 可以启动
+
+[ ] 上传音频可以识别
+
+[ ] 麦克风可以录音
+
+[ ] 本地模型可以离线加载
+
+[ ] README 完整
+
+[ ] 实验报告完整
+
+[ ] figures 已生成
+
+[ ] 没有虚构实验数据
+
+然后创建：
+
+FINAL_CHECKLIST.md
+
+逐项记录：
+
+PASS
+
+FAIL
+
+WARNING
+
+---
+
+# 二十二、最终提交目录
+
+最终帮我整理一个：
+
+submission/
+
+里面包含：
+
+submission/
+├── source_code/
+├── model/
+├── dataset/
+├── experiment_report/
+├── results/
+├── README.md
+└── requirements.txt
+
+如果原始数据集非常大：
+
+不要直接复制完整数据造成重复占用空间。
+
+可以提供：
+
+dataset/
+    README.md
+    download_dataset.py
+    manifests/
+
+并在 README 解释如何获得完整公开数据集。
+
+如果老师明确要求直接提交数据集，则再准备一个适合提交的子集。
+
+---
+
+# 二十三、你和我的交互方式
+
+从现在开始，你不是只给建议。
+
+你需要实际查看当前目录和机器环境，并逐步完成这个项目。
+
+首先执行：
+
+1. pwd
+2. 查看当前目录
+3. 检查 Python
+4. 检查 pip
+5. 检查 GPU/CUDA
+6. 检查磁盘空间
+
+然后创建项目开发计划：
+
+PROJECT_PLAN.md
+
+内容包括：
+
+Phase 1 环境检查
+Phase 2 Baseline
+Phase 3 数据集
+Phase 4 Evaluation
+Phase 5 Fine-tuning
+Phase 6 Improvement
+Phase 7 UI
+Phase 8 Report
+Phase 9 Final Verification
+
+完成计划后立刻从 Phase 1 开始执行。
+
+不要只把计划告诉我然后停止。
+
+在没有遇到必须由我决定的问题时，请自行选择合理方案继续完成。
+
+如果遇到多个技术方案：
+
+优先选择：
+
+稳定
+简单
+容易复现
+占用资源低
+容易获得较高课程分数
+
+的方案。
+
+每完成一个 Phase：
+
+更新 PROJECT_PLAN.md 中的状态。
+
+例如：
+
+- [x] Phase 1
+- [x] Phase 2
+- [ ] Phase 3
+
+同时把重要信息记录下来，避免后续遗忘。
+
+现在开始执行整个 ChineseASR 大作业。

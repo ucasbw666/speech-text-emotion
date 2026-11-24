@@ -1,0 +1,15 @@
+{
+  "VerifiedThenRemovedFiles": 2711,
+  "Destination": "D:\\语音大作业",
+  "Note": "Two historical .pytest_cache folders were unreadable and are not required for runtime. C-drive parent directories may remain as lightweight compatibility containers.",
+  "Retained": [
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\.pytest_cache",
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR",
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\work\\submission-verify\\source_code\\.pytest_cache",
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\work\\submission-verify\\source_code",
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\work\\submission-verify",
+    "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\work"
+  ],
+  "RemovedSourceBytes": 1822829214.0,
+  "Date": "2026-11-24T20:40:58.4437561+08:00"
+}

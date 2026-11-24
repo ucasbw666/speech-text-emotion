@@ -1,0 +1,65 @@
+{
+  "config": {
+    "project": {
+      "name": "ChineseASR",
+      "seed": 42
+    },
+    "model": {
+      "source": "openai/whisper-small",
+      "local_dir": "models/asr_model",
+      "language": "zh",
+      "task": "transcribe",
+      "local_files_only": true
+    },
+    "inference": {
+      "device": "auto",
+      "batch_size": 1,
+      "num_beams": 1,
+      "max_new_tokens": 256,
+      "chunk_length_s": 30
+    },
+    "training": {
+      "method": "lora",
+      "epochs": 3,
+      "batch_size": 1,
+      "gradient_accumulation_steps": 8,
+      "learning_rate": 0.0001,
+      "warmup_ratio": 0.1,
+      "fp16": true,
+      "gradient_checkpointing": false,
+      "lora_r": 16,
+      "lora_alpha": 32,
+      "lora_dropout": 0.05
+    },
+    "augmentation": {
+      "enabled": false
+    },
+    "data": {
+      "sample_rate": 16000,
+      "text_normalization": {
+        "lowercase_english": true,
+        "remove_punctuation": true,
+        "normalize_width": true
+      }
+    }
+  },
+  "arguments": {
+    "train_manifest": "data\\manifests\\train.jsonl",
+    "dev_manifest": "data\\manifests\\dev.jsonl",
+    "config": "configs\\baseline.yaml",
+    "model_dir": "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\models\\asr_model",
+    "output_dir": "checkpoints\\baseline",
+    "batch_size": null,
+    "epochs": null,
+    "learning_rate": null,
+    "device": "cuda",
+    "num_workers": 0,
+    "smoke_test": false
+  },
+  "device": "cuda",
+  "torch_version": "2.5.1",
+  "train_samples": 364,
+  "dev_samples": 354,
+  "best_validation_loss": 1.1122231104616391,
+  "total_seconds": 246.14968050000243
+}

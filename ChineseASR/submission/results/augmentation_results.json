@@ -1,0 +1,16 @@
+{
+  "substitutions": 371,
+  "deletions": 41,
+  "insertions": 1,
+  "reference_characters": 5041,
+  "errors": 413,
+  "cer": 0.08192818885141837,
+  "samples": 355,
+  "device": "cuda",
+  "total_inference_seconds": 159.84370140000829,
+  "wall_clock_seconds": 160.78345460000128,
+  "average_inference_seconds": 0.45026394760565713,
+  "average_real_time_factor": 0.1384724022627748,
+  "manifest": "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\data\\manifests\\test.jsonl",
+  "model_dir": "C:\\Users\\22502\\Documents\\Codex\\2026-10-02\\ban\\outputs\\ChineseASR\\models\\asr_model"
+}

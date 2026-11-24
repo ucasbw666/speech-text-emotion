@@ -1,0 +1,32 @@
+{
+  "repository": "ucasbw666/speech-text-emotion",
+  "release_tag": "models-v1",
+  "release_download_base": "https://github.com/ucasbw666/speech-text-emotion/releases/download/models-v1",
+  "assets": [
+    {
+      "asset_name": "whisper-small-model.safetensors",
+      "sha256": "1d7734884874f1a1513ed9aa760a4f8e97aaa02fd6d93a3a85d27b2ae9ca596b",
+      "size": 966995080,
+      "paths": [
+        "ChineseASR/models/asr_model/model.safetensors"
+      ]
+    },
+    {
+      "asset_name": "emotion2vec-plus-large-model.pt",
+      "sha256": "be501a01f26fcdc7663a062dff86af839afbaef7c4de32f5e42d7e1ad2784da4",
+      "size": 1945790254,
+      "paths": [
+        "ChineseASR/models/emotion/emotion2vec_plus_large/model.pt"
+      ]
+    },
+    {
+      "asset_name": "emotion-production-backbone-adapter.pth",
+      "sha256": "17b6b2d4dc6067382b97d3ca383715f2815a594628171e4de26ed205e5c77661",
+      "size": 201554873,
+      "paths": [
+        "ChineseASR/models/emotion/production/branch_1/backbone_adapter.pth",
+        "ChineseASR/submission/model/emotion_production/branch_1/backbone_adapter.pth"
+      ]
+    }
+  ]
+}

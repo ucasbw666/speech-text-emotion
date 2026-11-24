@@ -1,0 +1,6 @@
+﻿audio_path,reference,prediction,cer,substitutions,deletions,insertions,duration_seconds,inference_seconds,real_time_factor
+C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\data\raw\aishell1_subset\test\train\S0004\BAC009S0004W0121.wav,不排除购房者可以在互联网上下单,不排除購房者可以在互聯網上下單,0.26666666666666666,4,0,0,3.349,0.7045894999973825,0.21038802627571887
+C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\data\raw\aishell1_subset\test\train\S0004\BAC009S0004W0123.wav,行业集中度加速提高,行业集中度加速提高,0.0,0,0,0,2.576,0.2570769999983895,0.09979697204906425
+C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\data\raw\aishell1_subset\test\train\S0004\BAC009S0004W0124.wav,资本市场收购案例急剧增长,资本市场收购案例极具增长,0.16666666666666666,2,0,0,2.734,0.3208693000015046,0.11736258229755106
+C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\data\raw\aishell1_subset\test\train\S0004\BAC009S0004W0125.wav,房地产行业也正在以加倍的速度兼并重组,房地产行业也正在以加倍的速度兼并重组,0.0,0,0,0,4.099,0.4007216999998491,0.09776084410828229
+C:\Users\22502\Documents\Codex\2026-10-02\ban\outputs\ChineseASR\data\raw\aishell1_subset\test\train\S0004\BAC009S0004W0126.wav,代表着旧有竞争格局逐步被打破,代表着旧有竞争格局逐步被打破,0.0,0,0,0,3.096,0.33068810000258964,0.10681140180962197
