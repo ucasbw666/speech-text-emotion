@@ -1,0 +1,16 @@
+name: Publish verified runtime models
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  model-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Download pinned models and verify release checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/server_publish_models.py
